@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./projektowanie-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:roha*xi0ge@db:5432/flashcards
+    depends_on:
+      - db
+
+  frontend:
+    build: ./projektowanie-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: roha*xi0ge
+      POSTGRES_DB: flashcards
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+
+volumes:
+  pgdata:
